@@ -2,13 +2,23 @@
 name = "lcovparser"
 version = "0.0.1"
 description = "A pure Python parser for LCOV info files"
-license = "Apache v2"
+license = "Apache-2.0"
+readme = "README.rst"
 authors = [
   "Chris Timperley <christimperley@googlemail.com>"
 ]
 repository = "https://github.com/ChrisTimperley/lcovparser.py"
 homepage = "https://github.com/ChrisTimperley/lcovparser.py"
 keywords = ["LCOV", "coverage", "trace file", "parser"]
+classifiers = [
+  "Natural Language :: English",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+]
 
 [tool.poetry.dependencies]
 python = ">= 3.6"
