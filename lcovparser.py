@@ -146,7 +146,7 @@ def _parse_line(line: str, record: t.Optional[Record] = None
     return record, False
 
 
-def parse_lcove(filename: str) -> t.Mapping[str, Record]:
+def parse_lcov(filename: str) -> t.Mapping[str, Record]:
 
 
     all_records = {}
