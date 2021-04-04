@@ -39,16 +39,19 @@ class Record:
     lines: t.Mapping[int, int] = attr.Factory(dict)
     functions: t.Mapping[str, Function] = attr.Factory(dict)
     branches: t.Set[Branch] = attr.Factory(set)
-    totals: Totals = Totals()
+    totals: Totals = attr.Factory(Totals)
 
     def __repr__(self) -> str:
         s = f"Filename: {self.filename}, "
 
         ts = self.totals
-        s += "Line coverage %.2f%%, Function coverage %.2f%%, Branch coverage %.2f%%" \
+        if float(ts.total_lines) and float(ts.total_functions) and float(ts.total_branches):
+            s += "Line coverage %.2f%%, Function coverage %.2f%%, Branch coverage %.2f%%" \
                 %    (float(ts.hit_lines)*100/float(ts.total_lines),
                      float(ts.hit_functions)*100/float(ts.total_functions),
                      float(ts.hit_branches)*100/float(ts.total_branches))
+        else:
+            s = f"Filename: {self.filename}"
         return s
 
 
@@ -154,7 +157,8 @@ def parse_lcove(filename: str) -> t.Mapping[str, Record]:
             if done:
                 all_records[record.filename] = record
                 record = None
-    print(all_records['/ros_ws/src/navigation/move_base/src/move_base.cpp'])
+#   print(all_records['/ros_ws/src/navigation/move_base/src/move_base.cpp'])
+    return all_records
 
 
 if __name__=="__main__":
