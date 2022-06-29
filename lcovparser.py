@@ -55,24 +55,36 @@ class Report(t.Mapping[str, Record]):
         return Report(filename_to_record)
 
 
-def parse_file(filename: str) -> Report:
+def parse_file(
+    filename: str,
+    *,
+    ignore_incorrect_counts: bool = False,
+) -> Report:
     """Parse a given lcov file."""
     with open(filename, "r") as fh:
         contents = fh.read()
-    return parse_text(contents)
+    return parse_text(contents, ignore_incorrect_counts=ignore_incorrect_counts)
 
 
-def parse_text(contents: str) -> Report:
+def parse_text(
+    contents: str,
+    *,
+    ignore_incorrect_counts: bool = False,
+) -> Report:
     """Parse the text contents of an lcov file."""
-    return parse_lines(contents.splitlines())
+    return parse_lines(contents.splitlines(), ignore_incorrect_counts=ignore_incorrect_counts)
 
 
-def parse_lines(lines: t.List[str]) -> Report:
+def parse_lines(
+    lines: t.List[str],
+    *,
+    ignore_incorrect_counts: bool = False,
+) -> Report:
     """Parse the lines of an lcov file."""
     records: t.List[Record] = []
     line_iterator: t.Iterator[str] = iter(lines)
     while True:
-        maybe_next_record = _parse_next_record(line_iterator)
+        maybe_next_record = _parse_next_record(line_iterator, ignore_incorrect_counts=ignore_incorrect_counts)
         if maybe_next_record:
             records.append(maybe_next_record)
         else:
@@ -80,7 +92,11 @@ def parse_lines(lines: t.List[str]) -> Report:
     return Report.build(records)
 
 
-def _parse_next_record(lines: t.Iterator[str]) -> t.Optional[Record]:
+def _parse_next_record(
+    lines: t.Iterator[str],
+    *,
+    ignore_incorrect_counts: bool = False,
+) -> t.Optional[Record]:
     # http://ltp.sourceforge.net/test/coverage/lcov.readme.php#6
     # are there no more records in this file?
     try:
@@ -107,6 +123,28 @@ def _parse_next_record(lines: t.Iterator[str]) -> t.Optional[Record]:
         if directive == "TN":
             record.test = content
 
+        # FNF:<number of functions instrumented>
+        elif directive == "FNF" and not ignore_incorrect_counts:
+            expected_functions_instrumented = int(content)
+            actual_functions_instrumented = len(record.functions)
+            if expected_functions_instrumented != actual_functions_instrumented:
+                raise ValueError(
+                    f"unexpected FNF count (actual: {actual_functions_instrumented}; "
+                    f"expected: {expected_functions_instrumented})",
+                )
+
+        # FNH:<number of functions executed in current record>
+        elif directive == "FNH" and not ignore_incorrect_counts:
+            expected_functions_executed = int(content)
+            actual_functions_executed = sum(
+                1 for function in record.functions.values() if function.executions and function.executions > 0
+            )
+            if expected_functions_executed != actual_functions_executed:
+                raise ValueError(
+                    f"unexpected FNH count (actual: {actual_functions_executed}; "
+                    f"expected: {expected_functions_executed})",
+                )
+
         # FN:<line number of function start>,<function name>
         elif directive == 'FN':
             args = content.split(',')
@@ -121,7 +159,7 @@ def _parse_next_record(lines: t.Iterator[str]) -> t.Optional[Record]:
             record.functions[args[1]].executions = int(args[0])
 
         # LH:<number of lines with a non-zero execution count>
-        elif directive == 'LH':
+        elif directive == "LH" and not ignore_incorrect_counts:
             expected_lines_hit = int(content)
             actual_lines_hit = sum(1 for count in record.lines.values() if count > 0)
             if expected_lines_hit != actual_lines_hit:
@@ -131,7 +169,7 @@ def _parse_next_record(lines: t.Iterator[str]) -> t.Optional[Record]:
                 )
 
         # LF:<number of instrumented lines>
-        elif directive == 'LF':
+        elif directive == "LF" and not ignore_incorrect_counts:
             expected_lines_instrumented = int(content)
             actual_lines_instrumented = len(record.lines)
             if expected_lines_instrumented != actual_lines_instrumented:

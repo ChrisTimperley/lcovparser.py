@@ -67,7 +67,7 @@ DA:208,0
 DA:213,0
 DA:214,0
 DA:215,0
-LF:55
+LF:56
 LH:0
 end_of_record
 SF:/experiment/src/deflate.c
@@ -442,7 +442,7 @@ DA:769,0
 DA:770,0
 DA:771,0
 DA:772,0
-LF:343
+LF:359
 LH:0
 end_of_record
 SF:/experiment/src/gzip.c
@@ -1765,8 +1765,8 @@ DA:1887,0
 DA:1888,0
 DA:1889,0
 DA:1890,0
-LF:1260
-LH:282
+LF:1267
+LH:284
 end_of_record
 SF:/experiment/src/gzip.h
 FNF:0
@@ -1834,8 +1834,8 @@ DA:262,4
 DA:263,2
 DA:282,0
 DA:283,0
-LF:0
-LH:0
+LF:63
+LH:15
 end_of_record
 SF:/experiment/src/inflate.c
 FN:300,huft_build
@@ -2498,8 +2498,8 @@ DA:983,1
 DA:984,1
 DA:985,1
 DA:986,1
-LF:634
-LH:434
+LF:642
+LH:442
 end_of_record
 SF:/experiment/src/lib/close-stream.c
 FN:58,close_stream
@@ -2574,7 +2574,7 @@ DA:108,1
 DA:109,1
 DA:110,0
 DA:111,1
-LF:35
+LF:36
 LH:14
 end_of_record
 SF:/experiment/src/lib/closeout.c
@@ -2610,7 +2610,7 @@ DA:121,1
 DA:122,1
 DA:123,0
 DA:124,1
-LF:23
+LF:24
 LH:6
 end_of_record
 SF:/experiment/src/lib/config.h
@@ -2618,7 +2618,7 @@ FNF:0
 FNH:0
 DA:279,0
 DA:371,0
-LF:0
+LF:2
 LH:0
 end_of_record
 SF:/experiment/src/lib/dup-safer.c
@@ -2726,7 +2726,7 @@ SF:/experiment/src/lib/freading.h
 FNF:0
 FNH:0
 DA:39,0
-LF:0
+LF:1
 LH:0
 end_of_record
 SF:/experiment/src/lib/fseeko.c
@@ -2792,7 +2792,7 @@ FNDA:0,quotearg.c:pgettext_aux
 FNDA:0,quotearg.c:npgettext_aux
 FNDA:0,quotearg.c:dcpgettext_expr
 FNDA:0,quotearg.c:dcnpgettext_expr
-FNF:4
+FNF:12
 FNH:0
 DA:67,0
 DA:145,0
@@ -2866,7 +2866,7 @@ DA:274,0
 DA:275,0
 DA:276,0
 DA:277,0
-LF:71
+LF:72
 LH:0
 end_of_record
 SF:/experiment/src/lib/open-safer.c
@@ -3581,7 +3581,7 @@ DA:886,0
 DA:887,0
 DA:888,0
 DA:889,0
-LF:620
+LF:624
 LH:0
 end_of_record
 SF:/experiment/src/lib/stat-time.h
@@ -3698,7 +3698,7 @@ DA:182,0
 DA:183,0
 DA:184,0
 DA:185,0
-LF:94
+LF:95
 LH:0
 end_of_record
 SF:/experiment/src/lib/utimens.c
@@ -3882,7 +3882,7 @@ DA:226,0
 DA:234,0
 DA:235,0
 DA:236,0
-LF:44
+LF:46
 LH:0
 end_of_record
 SF:/experiment/src/lib/xmalloc.c
@@ -3988,7 +3988,7 @@ DA:40,0
 DA:45,0
 DA:47,0
 DA:48,0
-LF:0
+LF:7
 LH:0
 end_of_record
 SF:/experiment/src/tailor.h
@@ -4004,8 +4004,8 @@ DA:304,1
 DA:312,1
 DA:316,0
 DA:320,0
-LF:0
-LH:0
+LF:10
+LH:7
 end_of_record
 SF:/experiment/src/trees.c
 FN:344,ct_init
@@ -4653,7 +4653,7 @@ DA:1077,0
 DA:1078,0
 DA:1079,0
 DA:1080,0
-LF:583
+LF:615
 LH:0
 end_of_record
 SF:/experiment/src/unlzh.c
@@ -4933,7 +4933,7 @@ DA:395,0
 DA:396,0
 DA:397,0
 DA:398,0
-LF:232
+LF:250
 LH:0
 end_of_record
 SF:/experiment/src/unlzw.c
@@ -5125,7 +5125,7 @@ DA:372,0
 DA:373,0
 DA:374,0
 DA:375,0
-LF:171
+LF:184
 LH:0
 end_of_record
 SF:/experiment/src/unpack.c
@@ -5280,7 +5280,7 @@ DA:249,0
 DA:250,0
 DA:251,0
 DA:252,0
-LF:132
+LF:143
 LH:0
 end_of_record
 SF:/experiment/src/unzip.c
@@ -5438,7 +5438,7 @@ DA:212,0
 DA:213,0
 DA:214,0
 DA:215,0
-LF:140
+LF:148
 LH:43
 end_of_record
 SF:/experiment/src/util.c
@@ -5719,7 +5719,7 @@ DA:498,0
 DA:499,0
 DA:500,0
 DA:501,0
-LF:232
+LF:233
 LH:81
 end_of_record
 SF:/experiment/src/zip.c
