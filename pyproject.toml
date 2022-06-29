@@ -19,10 +19,11 @@ classifiers = [
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
 ]
+include = ["py.typed"]
 
 [tool.poetry.dependencies]
 python = ">= 3.6"
-attrs = "^20.3.0"
+attrs = ">= 20.3.0"
 sourcelocation = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
