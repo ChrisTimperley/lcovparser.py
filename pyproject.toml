@@ -23,6 +23,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">= 3.6"
 attrs = "^20.3.0"
+sourcelocation = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7.9"
