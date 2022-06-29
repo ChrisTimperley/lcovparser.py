@@ -5,6 +5,7 @@ from __future__ import annotations
 import typing as t
 
 import attr
+from sourcelocation import FileLineSet
 
 __version__ = '0.0.1'
 
@@ -24,6 +25,11 @@ class Record:
     test: t.Optional[str] = attr.ib(default=None)
     lines: t.MutableMapping[int, int] = attr.ib(factory=dict)
     functions: t.MutableMapping[str, Function] = attr.ib(factory=dict)
+
+    @property
+    def lines_executed(self) -> t.Set[int]:
+        """Return the set of lines that were executed at least once."""
+        return {line for (line, hits) in self.lines.items() if hits > 0}
 
     def add_function(self, function: Function) -> None:
         """Add a function to this record."""
@@ -47,6 +53,13 @@ class Report(t.Mapping[str, Record]):
 
     def __len__(self) -> int:
         return len(self._filename_to_record)
+
+    def to_file_line_set(self) -> FileLineSet:
+        """Return the set of lines covered by this report."""
+        filename_to_lines: t.Dict[str, t.Set[int]] = {
+            filename: record.lines_executed for (filename, record) in self.items()
+        }
+        return FileLineSet.from_dict(filename_to_lines)
 
     @classmethod
     def build(cls, records: t.Collection[Record]) -> Report:
