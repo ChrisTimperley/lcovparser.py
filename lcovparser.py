@@ -137,7 +137,10 @@ def _parse_next_record(
             record.test = content
 
         # FNF:<number of functions instrumented>
-        elif directive == "FNF" and not ignore_incorrect_counts:
+        elif directive == "FNF":
+            if ignore_incorrect_counts:
+                continue
+
             expected_functions_instrumented = int(content)
             actual_functions_instrumented = len(record.functions)
             if expected_functions_instrumented != actual_functions_instrumented:
@@ -147,7 +150,10 @@ def _parse_next_record(
                 )
 
         # FNH:<number of functions executed in current record>
-        elif directive == "FNH" and not ignore_incorrect_counts:
+        elif directive == "FNH":
+            if ignore_incorrect_counts:
+                continue
+
             expected_functions_executed = int(content)
             actual_functions_executed = sum(
                 1 for function in record.functions.values() if function.executions and function.executions > 0
@@ -172,7 +178,10 @@ def _parse_next_record(
             record.functions[args[1]].executions = int(args[0])
 
         # LH:<number of lines with a non-zero execution count>
-        elif directive == "LH" and not ignore_incorrect_counts:
+        elif directive == "LH":
+            if ignore_incorrect_counts:
+                continue
+
             expected_lines_hit = int(content)
             actual_lines_hit = sum(1 for count in record.lines.values() if count > 0)
             if expected_lines_hit != actual_lines_hit:
@@ -182,7 +191,10 @@ def _parse_next_record(
                 )
 
         # LF:<number of instrumented lines>
-        elif directive == "LF" and not ignore_incorrect_counts:
+        elif directive == "LF":
+            if ignore_incorrect_counts:
+                continue
+
             expected_lines_instrumented = int(content)
             actual_lines_instrumented = len(record.lines)
             if expected_lines_instrumented != actual_lines_instrumented:
