@@ -72,32 +72,47 @@ def parse_file(
     filename: str,
     *,
     ignore_incorrect_counts: bool = False,
+    merge_duplicate_line_hit_counts: bool = False,
 ) -> Report:
     """Parse a given lcov file."""
     with open(filename, "r") as fh:
         contents = fh.read()
-    return parse_text(contents, ignore_incorrect_counts=ignore_incorrect_counts)
+    return parse_text(
+        contents=contents,
+        ignore_incorrect_counts=ignore_incorrect_counts,
+        merge_duplicate_line_hit_counts=merge_duplicate_line_hit_counts,
+    )
 
 
 def parse_text(
     contents: str,
     *,
     ignore_incorrect_counts: bool = False,
+    merge_duplicate_line_hit_counts: bool = False,
 ) -> Report:
     """Parse the text contents of an lcov file."""
-    return parse_lines(contents.splitlines(), ignore_incorrect_counts=ignore_incorrect_counts)
+    return parse_lines(
+        lines=contents.splitlines(),
+        ignore_incorrect_counts=ignore_incorrect_counts,
+        merge_duplicate_line_hit_counts=merge_duplicate_line_hit_counts,
+    )
 
 
 def parse_lines(
     lines: t.List[str],
     *,
     ignore_incorrect_counts: bool = False,
+    merge_duplicate_line_hit_counts: bool = False,
 ) -> Report:
     """Parse the lines of an lcov file."""
     records: t.List[Record] = []
     line_iterator: t.Iterator[str] = iter(lines)
     while True:
-        maybe_next_record = _parse_next_record(line_iterator, ignore_incorrect_counts=ignore_incorrect_counts)
+        maybe_next_record = _parse_next_record(
+            line_iterator,
+            ignore_incorrect_counts=ignore_incorrect_counts,
+            merge_duplicate_line_hit_counts=merge_duplicate_line_hit_counts,
+        )
         if maybe_next_record:
             records.append(maybe_next_record)
         else:
@@ -109,6 +124,7 @@ def _parse_next_record(
     lines: t.Iterator[str],
     *,
     ignore_incorrect_counts: bool = False,
+    merge_duplicate_line_hit_counts: bool = False,
 ) -> t.Optional[Record]:
     # http://ltp.sourceforge.net/test/coverage/lcov.readme.php#6
     # are there no more records in this file?
@@ -117,8 +133,16 @@ def _parse_next_record(
     except StopIteration:
         return None
 
-    # SF:<absolute path to the source file>
+    # read the first line of this record
     directive, _, content = line.strip().partition(':')
+
+    # records may optionally begin with TN:<test name>
+    # if so, skip that line and continue to the next
+    if directive == "TN":
+        line = next(lines)
+        directive, _, content = line.strip().partition(':')
+
+    # SF:<absolute path to the source file>
     if directive != "SF":
         raise ValueError(f"expected record to begin with SF (actual: {line})")
     record = Record(filename=content)
@@ -209,8 +233,13 @@ def _parse_next_record(
             assert len(args) > 1 and len(args) < 3
             line_no = int(args[0])
             num_executions = int(args[1])
+
             if line_no in record.lines:
-                raise ValueError(f"duplicate DA entry for line: {line_no}")
+                if merge_duplicate_line_hit_counts:
+                    num_executions += record.lines[line_no]
+                else:
+                    raise ValueError(f"duplicate DA entry for line: {line_no}")
+
             record.lines[line_no] = num_executions
 
         else:
