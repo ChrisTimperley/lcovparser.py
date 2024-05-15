@@ -2,29 +2,29 @@
 """Provides a mechanism for parsing LCOV .info files."""
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 import typing as t
 
-import attr
 from sourcelocation import FileLineSet
 
 __version__ = '0.0.1'
 
 
-@attr.s(auto_attribs=True, slots=True)
+@dataclass
 class Function:
     """Provides coverage information for a function."""
     name: str
     line: int
-    executions: t.Optional[int] = attr.ib(default=None)
+    executions: t.Optional[int] = field(default=None)
 
 
-@attr.s(auto_attribs=True, slots=True)
+@dataclass
 class Record:
     """Provides coverage information for a source file."""
     filename: str
-    test: t.Optional[str] = attr.ib(default=None)
-    lines: t.MutableMapping[int, int] = attr.ib(factory=dict)
-    functions: t.MutableMapping[str, Function] = attr.ib(factory=dict)
+    test: t.Optional[str] = field(default=None)
+    lines: t.MutableMapping[int, int] = field(default_factory=dict)
+    functions: t.MutableMapping[str, Function] = field(default_factory=dict)
 
     @property
     def lines_executed(self) -> t.Set[int]:
@@ -40,7 +40,7 @@ class Record:
         self.functions[function.name] = function
 
 
-@attr.s(auto_attribs=True, slots=True)
+@dataclass
 class Report(t.Mapping[str, Record]):
     """Report provides coverage information from an lcov report."""
     _filename_to_record: t.Mapping[str, Record]
